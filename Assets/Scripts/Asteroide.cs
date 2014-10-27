@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Asteroide : MonoBehaviour {
@@ -14,26 +14,37 @@ public class Asteroide : MonoBehaviour {
 		posy = 0;
 		choice = 0;
 	}
+
+	void repop(){
+		choice = Random.Range (0, 2);
+		posy = Random.Range (-5, 5);
+		if (choice == 0) {
+			transform.position = new Vector3 (15, posy, 0);
+		}
+		else{
+			transform.position = new Vector3 (-15, posy, 0);
+		}
+
+		}
+	float size(){
+		int a = Random.Range (1, 3);
+		int b = Random.Range (0, 100);
+		float bf = (float)a + (float)(b * 0.01F);
+		transform.localScale = new Vector3 (bf, bf, bf);
+		return b;
+		}
+	void speedfunction(float neg){
+		transform.position -= new Vector3 (1*(neg) * this.speed, 0, 0);
+		transform.position += new Vector3 (0, coefdir * speed*(neg), 0);
+		}
 	
 	// Update is called once per frame
 	void Update () {
 		if (transform.position.x <= -15 || transform.position.x>= 15) {
 			//Re pop
-			choice = Random.Range (0, 2);
-			Debug.Log (choice);
-			posy = Random.Range (-5, 5);
-			Debug.Log (posy);
-			if (choice == 0) {
-				transform.position = new Vector3 (15, posy, 0);
-			}
-			else{
-				transform.position = new Vector3 (-15, posy, 0);
-			}
+			repop ();
 			//Changement de la taille
-			int a = Random.Range (1, 3);
-			int b = Random.Range (0, 100);
-			float bf = (float)a + (float)(b * 0.01F);
-			transform.localScale = new Vector3 (bf, bf, bf);
+			float b = size ();
 			if(choice == 0){
 				if ((posy <= 5) && (posy >= 4))
 					b = Random.Range (-40, -25);
@@ -78,12 +89,11 @@ public class Asteroide : MonoBehaviour {
 			}
 		}
 		if (choice == 0) {
-			transform.position -= new Vector3 (1 * this.speed, 0, 0);
-			transform.position += new Vector3 (0, coefdir * speed, 0);
+			speedfunction(1);
 		} else {
-			transform.position -= new Vector3 (-1 * this.speed, 0, 0);
-			transform.position += new Vector3 (0, -coefdir * speed, 0);
+			speedfunction(-1);
 		}
 		
 	}
+	
 }
